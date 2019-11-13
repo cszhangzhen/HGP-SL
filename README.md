@@ -1,6 +1,8 @@
 # HGP-SL
 Hierarchical Graph Pooling with Structure Learning (AAAI-2020).
 
+![](https://github.com/cszhangzhen/HGP-SL/blob/master/model.png)
+
 This is a PyTorch implementation of the HGP-SL algorithm, which learns a low-dimensional representation for the entire graph. Specifically, the graph pooling operation utilizes node features and graph structure information to perform down-sampling on graphs. Then, a structure learning layer is stacked on the pooling operation, which aims to learn a refined graph structure that can best preserve the essential topological information.
 
 
