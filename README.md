@@ -1,5 +1,5 @@
 # HGP-SL
-Hierarchical Graph Pooling with Structure Learning (AAAI-2020). Will be available online soon.
+Hierarchical Graph Pooling with Structure Learning (AAAI-2020). Preprint version is available on arXiv(https://arxiv.org/abs/1911.05954).
 
 ![](https://github.com/cszhangzhen/HGP-SL/blob/master/fig/model.png)
 
