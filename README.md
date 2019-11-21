@@ -8,17 +8,17 @@ This is a PyTorch implementation of the HGP-SL algorithm, which learns a low-dim
 
 ## Requirements
 * python3
-* pytorch
+* pytorch-1.1.0
 * torch-scatter
 * torch-sparse
 * torch-cluster
 * torch-geometric
 
 Note:
-This code repository is heavily built on [pytorch_geometric](https://github.com/rusty1s/pytorch_geometric), which is a Geometric Deep Learning Extension Library for PyTorch. Please refer [here](https://pytorch-geometric.readthedocs.io/en/latest/) for how to install and utilize the libary.
+This code repository is heavily built on [pytorch_geometric](https://github.com/rusty1s/pytorch_geometric), which is a Geometric Deep Learning Extension Library for PyTorch. Please refer [here](https://pytorch-geometric.readthedocs.io/en/latest/) for how to install and utilize the library.
 
 ### Datasets
-Benchmarks are publicly available at [here](https://ls11-www.cs.tu-dortmund.de/staff/morris/graphkerneldatasets).
+Graph classification benchmarks are publicly available at [here](https://ls11-www.cs.tu-dortmund.de/staff/morris/graphkerneldatasets).
 
 This folder contains the following comma separated text files (replace DS by the name of the dataset):
 
