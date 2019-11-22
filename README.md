@@ -7,7 +7,7 @@ This is a PyTorch implementation of the HGP-SL algorithm, which learns a low-dim
 
 
 ## Requirements
-* python3
+* python3.6
 * pytorch==1.3.0
 * torch-scatter==1.4.0
 * torch-sparse==0.4.3
