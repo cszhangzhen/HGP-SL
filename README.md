@@ -1,5 +1,5 @@
 # HGP-SL
-Hierarchical Graph Pooling with Structure Learning (AAAI-2020). Preprint version is available on [arXiv](https://arxiv.org/abs/1911.05954).
+Hierarchical Graph Pooling with Structure Learning (Preprint version is available on [arXiv](https://arxiv.org/abs/1911.05954)).
 
 ![](https://github.com/cszhangzhen/HGP-SL/blob/master/fig/model.png)
 
@@ -72,11 +72,10 @@ python main.py
 ## Citing
 If you find HGP-SL useful for your research, please consider citing the following paper:
 ```
-@inproceedings{zhang2020hierarch,
-  title={Hierarchical Graph Pooling with Structure Learning.},
-  author={Zhen Zhang, Jiajun Bu, Martin Ester, Jianfeng Zhang, Chengwei Yao, Zhi Yu, Can Wang},
-  booktitle={Proceedings of the 34th AAAI Conference on Artificial Intelligence},
-  year={2020},
-  organization={AAAI}
+@article{zhang2019hierarchical,
+  title={Hierarchical Graph Pooling with Structure Learning},
+  author={Zhang, Zhen and Bu, Jiajun and Ester, Martin and Zhang, Jianfeng and Yao, Chengwei and Yu, Zhi and Wang, Can},
+  journal={arXiv preprint arXiv:1911.05954},
+  year={2019}
 }
 ``` 
