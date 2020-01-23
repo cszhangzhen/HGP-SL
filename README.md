@@ -69,6 +69,17 @@ To run HGP-SL, just execute the following command for graph classification task:
 python main.py
 ```
 
+### Parameter Settings
+| Datasets      | lr        | weight_decay   | batch_size      | pool_ratio     | dropout  | net_layers |
+| ------------- | --------- | -------------- | -------- 	   | --------       | -------- | ---------- |
+| PROTEINS      | 0.001     | 0.001     	 | 512             | 0.5            | 0.0      | 3			| 
+| Mutagenicity  | 0.001     | 0.001          | 512             | 0.8            | 0.0      | 3			|
+| NCI109	    | 0.001     | 0.001          | 512             | 0.8            | 0.0      | 3			|
+| NCI1          | 0.001		| 0.001          | 512             | 0.8            | 0.0      | 3			|
+| DD            | 0.0001    | 0.001          | 64              | 0.3            | 0.5      | 2          |
+| ENZYMES       | 0.001     | 0.001          | 128             | 0.8            | 0.0      | 2          |
+
+
 ## Citing
 If you find HGP-SL useful for your research, please consider citing the following paper:
 ```
