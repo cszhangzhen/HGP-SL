@@ -6,7 +6,7 @@ from torch.nn import Parameter
 from torch_geometric.data import Data
 from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.nn.pool.topk_pool import topk, filter_adj
-from torch_geometric.utils import softmax, dense_to_sparse, add_self_loops, remove_self_loops
+from torch_geometric.utils import softmax, dense_to_sparse, add_remaining_self_loops
 from torch_scatter import scatter_add
 from torch_sparse import spspmm, coalesce
 
@@ -115,8 +115,6 @@ class NodeInformationScore(MessagePassing):
 
     @staticmethod
     def norm(edge_index, num_nodes, edge_weight, dtype=None):
-        edge_index, _ = remove_self_loops(edge_index)
-
         if edge_weight is None:
             edge_weight = torch.ones((edge_index.size(1),), dtype=dtype, device=edge_index.device)
 
@@ -125,7 +123,7 @@ class NodeInformationScore(MessagePassing):
         deg_inv_sqrt = deg.pow(-0.5)
         deg_inv_sqrt[deg_inv_sqrt == float('inf')] = 0
 
-        edge_index, edge_weight = add_self_loops(edge_index, edge_weight, 0, num_nodes)
+        edge_index, edge_weight = add_remaining_self_loops(edge_index, edge_weight, 0, num_nodes)
 
         row, col = edge_index
         expand_deg = torch.zeros((edge_weight.size(0),), dtype=dtype, device=edge_index.device)
@@ -133,7 +131,7 @@ class NodeInformationScore(MessagePassing):
 
         return edge_index, expand_deg - deg_inv_sqrt[row] * edge_weight * deg_inv_sqrt[col]
 
-    def forward(self, x, edge_index, edge_weight=None):
+    def forward(self, x, edge_index, edge_weight):
         if self.cached and self.cached_result is not None:
             if edge_index.size(1) != self.cached_num_edges:
                 raise RuntimeError(
@@ -172,11 +170,11 @@ class HGPSLPool(torch.nn.Module):
         self.neighbor_augment = TwoHopNeighborhood()
         self.calc_information_score = NodeInformationScore()
 
-    def forward(self, x, edge_index, edge_attr=None, batch=None):
+    def forward(self, x, edge_index, edge_attr, batch=None):
         if batch is None:
             batch = edge_index.new_zeros(x.size(0))
 
-        x_information_score = self.calc_information_score(x, edge_index)
+        x_information_score = self.calc_information_score(x, edge_index, edge_attr)
         score = torch.sum(torch.abs(x_information_score), dim=1)
 
         # Graph Pooling
@@ -188,7 +186,7 @@ class HGPSLPool(torch.nn.Module):
 
         # Discard structure learning layer, directly return
         if self.sl is False:
-            return x, induced_edge_index, induced_edge_attr, batch, perm
+            return x, induced_edge_index, induced_edge_attr, batch
 
         # Structure Learning
         if self.sample:
@@ -207,6 +205,7 @@ class HGPSLPool(torch.nn.Module):
             hop_edge_attr = hop_data.edge_attr
             new_edge_index, new_edge_attr = filter_adj(hop_edge_index, hop_edge_attr, perm, num_nodes=score.size(0))
 
+            new_edge_index, new_edge_attr = add_remaining_self_loops(new_edge_index, new_edge_attr, 0, x.size(0))
             row, col = new_edge_index
             weights = (torch.cat([x[row], x[col]], dim=1) * self.att).sum(dim=-1)
             weights = F.leaky_relu(weights, self.negative_slop) + new_edge_attr * self.lamb
@@ -257,4 +256,4 @@ class HGPSLPool(torch.nn.Module):
             del adj
             torch.cuda.empty_cache()
 
-        return x, new_edge_index, new_edge_attr, batch, perm
+        return x, new_edge_index, new_edge_attr, batch
