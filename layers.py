@@ -16,10 +16,10 @@ class TwoHopNeighborhood(object):
         edge_index, edge_attr = data.edge_index, data.edge_attr
         n = data.num_nodes
 
-        fill = 1e16
-        value = edge_index.new_full((edge_index.size(1),), fill, dtype=torch.float)
+        value = edge_index.new_ones((edge_index.size(1),), dtype=torch.float)
 
-        index, value = spspmm(edge_index, value, edge_index, value, n, n, n, True)
+        index, value = spspmm(edge_index, value, edge_index, value, n, n, n)
+        value.fill_(0)
 
         edge_index = torch.cat([edge_index, index], dim=1)
         if edge_attr is None:
@@ -28,8 +28,7 @@ class TwoHopNeighborhood(object):
             value = value.view(-1, *[1 for _ in range(edge_attr.dim() - 1)])
             value = value.expand(-1, *list(edge_attr.size())[1:])
             edge_attr = torch.cat([edge_attr, value], dim=0)
-            data.edge_index, edge_attr = coalesce(edge_index, edge_attr, n, n, op='min', fill_value=fill)
-            edge_attr[edge_attr >= fill] = 0
+            data.edge_index, edge_attr = coalesce(edge_index, edge_attr, n, n)
             data.edge_attr = edge_attr
 
         return data
